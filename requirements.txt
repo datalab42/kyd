@@ -1,0 +1,3 @@
+-e git://github.com/wilsonfreitas/textparser.git#egg=textparser
+lxml
+bizdays
