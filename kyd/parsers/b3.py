@@ -2,6 +2,7 @@
 import json
 import logging
 from itertools import groupby
+from os import read
 
 from lxml import etree
 
@@ -25,8 +26,10 @@ class TaxaSwap:
         'cod_vertice'
     ]
 
-    def __init__(self, rawdata):
-        self.__data = read_fwf(rawdata.split('\n'), self.widths, self.colnames, parse_fun=self._parse)
+    def __init__(self, fname):
+        with open(fname, 'r') as fp:
+            rawdata = fp.read()
+            self.__data = read_fwf(rawdata.split('\n'), self.widths, self.colnames, parse_fun=self._parse)
         self.__findata = [self._build_findata(list(v)) for k, v in groupby(self.__data, key=lambda x: x['cod_taxa'])]
     
     def _parse(self, obj):
@@ -63,13 +66,14 @@ class TaxaSwap:
 
 
 class CDIIDI:
-    def __init__(self, rawdata):
-        self.rawdata = rawdata
+    def __init__(self, fname):
+        self.fname = fname
         self.parse()
 
     def parse(self):
         text_parser = PortugueseRulesParser2()
-        _data = json.loads(self.rawdata)
+        with open(self.fname, 'r') as fp:
+            _data = json.loads(fp.read())
         cdi_data = {
             'refdate': text_parser.parse(_data['dataTaxa']),
             'last_price': text_parser.parse(_data['taxa']),
@@ -172,15 +176,16 @@ class BVBG028:
         }
     }
 
-    def __init__(self, rawdata):
-        self.rawdata = rawdata
+    def __init__(self, fname):
+        self.fname = fname
         self.instruments = []
         self.missing = set()
         self.parse()
 
     def parse(self):
-        root = etree.XML(self.rawdata)
-        exchange = root[0][0]
+        with open(self.fname, 'rb') as fp:
+            tree = etree.parse(fp)
+        exchange = tree.getroot()[0][0]
         xs = exchange.findall(
             '{urn:bvmf.052.01.xsd}BizGrp/{urn:bvmf.100.02.xsd}Document/{urn:bvmf.100.02.xsd}Instrm')
         for node in xs:
@@ -212,15 +217,16 @@ class BVBG028:
 
 
 class BVBG086:
-    def __init__(self, rawdata):
-        self.rawdata = rawdata
+    def __init__(self, fname):
+        self.fname = fname
         self.instruments = []
         self.missing = set()
         self.parse()
 
     def parse(self):
-        root = etree.fromstring(self.rawdata)
-        exchange = root[0][0]
+        with open(self.fname, 'rb') as fp:
+            tree = etree.parse(fp)
+        exchange = tree.getroot()[0][0]
         xs = exchange.findall(
             '{urn:bvmf.052.01.xsd}BizGrp/{urn:bvmf.217.01.xsd}Document/{urn:bvmf.217.01.xsd}PricRpt')
         for node in xs:
