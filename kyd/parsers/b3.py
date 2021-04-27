@@ -337,11 +337,23 @@ class COTAHIST_file(FWFFile):
 
 
 class COTAHIST:
-    def __init__(self, rawdata):
-        self.rawdata = rawdata
+    def __init__(self, fname):
+        self.fname = fname
+        self._data = None
         self.parse()
 
     def parse(self):
-        pass
+        self._data = COTAHIST_file(self.fname)
 
+    @property
+    def data(self):
+        return self._data.data
+
+    @property
+    def header(self):
+        return self._data.header
+
+    @property
+    def trailer(self):
+        return self._data.trailer
 

@@ -1,7 +1,7 @@
 
 from kyd.parsers import unzip_to
 from kyd.parsers.b3 import CDIIDI, BVBG028, BVBG086, TaxaSwap
-from kyd.parsers.b3 import COTAHIST_file
+from kyd.parsers.b3 import COTAHIST
 
 def test_CDIIDI():
     x = CDIIDI('data/CDIIDI_2019-09-22.json')
@@ -30,11 +30,12 @@ def test_TaxaSwap():
     assert len(x.data) > 0
 
 
-import inspect
-
 def test_fwf():
-    ch = COTAHIST_file('data/COTAHIST_A2020_TEST.TXT')
-    # ms = inspect.getmembers(ch)
-    # ms = dir(ch)
-    print(ch.header)
+    x = COTAHIST('data/COTAHIST_A2020_TEST.TXT')
+    assert len(x.data) > 0
+
+
+def test_fwf_huge_files():
+    x = COTAHIST('data/COTAHIST_A2020.TXT')
+    assert len(x.data) > 0
 
