@@ -1,4 +1,5 @@
 
+import os
 import re
 import zipfile
 import logging
@@ -74,6 +75,16 @@ def unzip_and_get_content(fname, index=-1, encode=False, encoding='latin1'):
     else:
         return content
 
+
+def unzip_to(fname, dest, index=-1):
+    with open(fname, 'rb') as temp:
+        zf = zipfile.ZipFile(temp)
+        name = zf.namelist()[index]
+        logging.info('zipped file %s', name)
+        zf.extract(name, dest)
+        zf.close()
+
+    return os.path.join(dest, name)
 
 class Field:
     _counter = 0
