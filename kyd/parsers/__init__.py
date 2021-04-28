@@ -173,8 +173,8 @@ class FWFFileMeta(type):
 class FWFFile(metaclass=FWFFileMeta):
     skip_row = 0
 
-    def __init__(self, fname):
-        with open(fname, 'r') as fp:
+    def __init__(self, fname, encoding='UTF8'):
+        with open(fname, 'r', encoding=encoding) as fp:
             for ix, line in enumerate(fp):
                 if ix < self.skip_row:
                     continue

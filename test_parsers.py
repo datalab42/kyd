@@ -31,7 +31,8 @@ def test_TaxaSwap():
 
 
 def test_fwf():
-    x = COTAHIST('data/COTAHIST_A2020_TEST.TXT')
+    dest = unzip_to('data/COTAHIST_A1986.zip', 'data')
+    x = COTAHIST(dest)
     assert len(x.data) > 0
 
 

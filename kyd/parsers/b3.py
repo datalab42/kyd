@@ -343,7 +343,7 @@ class COTAHIST:
         self.parse()
 
     def parse(self):
-        self._data = COTAHIST_file(self.fname)
+        self._data = COTAHIST_file(self.fname, encoding='latin1')
 
     @property
     def data(self):
