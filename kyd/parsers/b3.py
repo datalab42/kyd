@@ -237,6 +237,8 @@ class BVBG086:
             'trade_date': 'TradDt/Dt',
             'symbol': 'SctyId/TckrSymb',
             'security_id': 'FinInstrmId/OthrId/Id',  # SecurityId
+            'security_proprietary': 'FinInstrmId/OthrId/Tp/Prtry',
+            'security_market': 'FinInstrmId/PlcOfListg/MktIdrCd',
             'trade_quantity': 'TradDtls/TradQty',  # Negócios
             'volume': 'FinInstrmAttrbts/NtlFinVol',
             'open_interest': 'FinInstrmAttrbts/OpnIntrst',
