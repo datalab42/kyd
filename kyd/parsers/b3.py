@@ -109,7 +109,7 @@ class BVBG028:
             'isin': 'InstrmInf/EqtyInf/ISIN',
             'distribution_id': 'InstrmInf/EqtyInf/DstrbtnId',
             'cfi_code': 'InstrmInf/EqtyInf/CFICd',
-            'specificication_code': 'InstrmInf/EqtyInf/SpcfctnCd',
+            'specification_code': 'InstrmInf/EqtyInf/SpcfctnCd',
             'corporation_name': 'InstrmInf/EqtyInf/CrpnNm',
             'symbol': 'InstrmInf/EqtyInf/TckrSymb',
             'payment_type': 'InstrmInf/EqtyInf/PmtTp',
@@ -202,13 +202,13 @@ class BVBG028:
         # remove ns {urn:bvmf.100.02.xsd} = 21 chars
         tag = elm.getchildren()[0].tag[21:]
         if self.ATTRS.get(tag) is None:
-            logging.error('Missing tag %s', tag)
             self.missing.add(tag)
             return
         for attr in self.ATTRS[tag]:
             els = node.findall(self.ATTRS[tag][attr], ns)
             if len(els):
                 data[attr] = els[0].text.strip()
+        data['instrument_type'] = tag
         self.instruments.append(data)
 
     @property

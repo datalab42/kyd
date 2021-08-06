@@ -78,13 +78,20 @@ def unzip_and_get_content(fname, index=-1, encode=False, encoding='latin1'):
 
 def unzip_to(fname, dest, index=-1):
     with open(fname, 'rb') as temp:
-        zf = zipfile.ZipFile(temp)
-        name = zf.namelist()[index]
-        logging.info('zipped file %s', name)
-        zf.extract(name, dest)
-        zf.close()
+        fp = unzip_file_to(temp, dest, index)
+
+    return fp
+
+
+def unzip_file_to(temp, dest, index=-1):
+    zf = zipfile.ZipFile(temp)
+    name = zf.namelist()[index]
+    logging.info('zipped file %s', name)
+    zf.extract(name, dest)
+    zf.close()
 
     return os.path.join(dest, name)
+
 
 class Field:
     _counter = 0
