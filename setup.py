@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 setuptools.setup(
     name='kyd',
     version='0.0.1',
-    packages=setuptools.find_packages(),
+    packages=['kyd.parsers'],
     author='Wilson Freitas',
     author_email='wilson.freitas@gmail.com',
     description='kyd - know your data.',
