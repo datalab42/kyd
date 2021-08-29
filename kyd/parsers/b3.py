@@ -186,13 +186,21 @@ class BVBG028:
         with open(self.fname, 'rb') as fp:
             tree = etree.parse(fp)
         exchange = tree.getroot()[0][0]
+        ns = {None: 'urn:bvmf.052.01.xsd'}
+        td_xpath = etree.ETXPath('//{urn:bvmf.052.01.xsd}BizGrpDtls')
+        td = td_xpath(exchange)
+        if len(td) > 0:
+            self.creation_date = td[0].find('CreDtAndTm', ns).text[:10]
+        else:
+            raise Exception('Invalid XML: tag BizGrpDtls not found')
+
         xs = exchange.findall(
             '{urn:bvmf.052.01.xsd}BizGrp/{urn:bvmf.100.02.xsd}Document/{urn:bvmf.100.02.xsd}Instrm')
         for node in xs:
             self.parse_instrument_node(node)
 
     def parse_instrument_node(self, node):
-        data = {}
+        data = {'creation_date': self.creation_date}
         ns = {None: 'urn:bvmf.100.02.xsd'}
         for attr in self.ATTRS['header']:
             els = node.findall(self.ATTRS['header'][attr], ns)
@@ -227,6 +235,14 @@ class BVBG086:
         with open(self.fname, 'rb') as fp:
             tree = etree.parse(fp)
         exchange = tree.getroot()[0][0]
+        ns = {None: 'urn:bvmf.052.01.xsd'}
+        td_xpath = etree.ETXPath('//{urn:bvmf.052.01.xsd}BizGrpDtls')
+        td = td_xpath(exchange)
+        if len(td) > 0:
+            self.creation_date = td[0].find('CreDtAndTm', ns).text[:10]
+        else:
+            raise Exception('Invalid XML: tag BizGrpDtls not found')
+
         xs = exchange.findall(
             '{urn:bvmf.052.01.xsd}BizGrp/{urn:bvmf.217.01.xsd}Document/{urn:bvmf.217.01.xsd}PricRpt')
         for node in xs:
@@ -271,7 +287,7 @@ class BVBG086:
             'adjusted_value_contract': 'FinInstrmAttrbts/AdjstdValCtrct',
         }
         ns = {None: 'urn:bvmf.217.01.xsd'}
-        data = {}
+        data = {'creation_date': self.creation_date}
         for attr in attrs:
             els = node.findall(attrs[attr], ns)
             if len(els):
@@ -421,6 +437,14 @@ class BVBG087:
         ns = {None: 'urn:bvmf.218.01.xsd'}
         exchange = tree.getroot()[0][0]
 
+        ns1 = {None: 'urn:bvmf.052.01.xsd'}
+        td_xpath = etree.ETXPath('//{urn:bvmf.052.01.xsd}BizGrpDtls')
+        td = td_xpath(exchange)
+        if len(td) > 0:
+            creation_date = td[0].find('CreDtAndTm', ns1).text[:10]
+        else:
+            raise Exception('Invalid XML: tag BizGrpDtls not found')
+
         td_xpath = etree.ETXPath('//{urn:bvmf.218.01.xsd}TradDt')
         td = td_xpath(exchange)
         if len(td) > 0:
@@ -433,6 +457,7 @@ class BVBG087:
             _xpath = etree.ETXPath('//{urn:bvmf.218.01.xsd}%s' % tag)
             for node in _xpath(exchange):
                 data = {
+                    'creation_date': creation_date,
                     'trade_date': trade_date,
                     'index_type': tag
                 }
