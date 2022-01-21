@@ -52,7 +52,7 @@ def parse_titpub(text, buf):
     text = StringIO(text.decode('ISO-8859-1'))
     writer = csv.writer(buf)
     _drop_first_2 = dropwhile(lambda x: x[0] < 2, enumerate(text))
-    _drop_empy = filter(lambda x: x[1].strip() is not '', _drop_first_2)
+    _drop_empy = filter(lambda x: x[1].strip() != '', _drop_first_2)
     for c, line in _drop_empy:
         row = line.split('@')
         tit = dict(
