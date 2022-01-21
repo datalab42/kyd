@@ -14,6 +14,10 @@ class PortugueseRulesParser2(PortugueseRulesParser):
         r'(\d{2})/(\d{2})/(\d{4})'
         return '{}-{}-{}'.format(match.group(3), match.group(2), match.group(1))
 
+    def parseDate_YYYYMMDD(self, text, match):
+        r'(\d{4})(\d{2})(\d{2})'
+        return '{}-{}-{}'.format(match.group(1), match.group(2), match.group(3))
+
 
 def convert_csv_to_dict(file, sep=';', encoding='utf-8'):
     parser = GenericParser()
