@@ -18,13 +18,14 @@ class AnbimaTPF:
 
     def parse(self):
         if isinstance(self.fname, str):
-            with open(self.fname, 'r', encoding='ISO-8859-1') as fp:
+            with open(self.fname, 'rb') as fp:
                 self._parse(fp)
         else:
             self._parse(self.fname)
 
     def _parse(self, fp):
-        _drop_first_n = dropwhile(lambda x: x[0] < 3, enumerate(fp))
+        _map_txt = map(lambda x: (x[0], x[1].decode('ISO-8859-1')), enumerate(fp))
+        _drop_first_n = dropwhile(lambda x: x[0] < 3, _map_txt)
         _drop_empy = filter(lambda x: x[1].strip() != '', _drop_first_n)
         for _, line in _drop_empy:
             row = line.split('@')
