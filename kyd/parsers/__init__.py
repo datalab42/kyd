@@ -22,6 +22,10 @@ class PortugueseRulesParser2(PortugueseRulesParser):
         r'^$'
         return None
 
+    def parseEmpty2(self, text, match):
+        r'^--$'
+        return None
+
     def parseDate_ptBR(self, text, match):
         r'(\d{2})/(\d{2})/(\d{4})'
         return '{}-{}-{}'.format(match.group(3), match.group(2), match.group(1))
