@@ -10,6 +10,18 @@ from textparser import PortugueseRulesParser, GenericParser
 
 
 class PortugueseRulesParser2(PortugueseRulesParser):
+    def parseInteger(self, text, match):
+        r'^\d+$'
+        return int(match.group())
+
+    def parseND(self, text, match):
+        r'^N\/D$'
+        return None
+
+    def parseEmpty(self, text, match):
+        r'^$'
+        return None
+
     def parseDate_ptBR(self, text, match):
         r'(\d{2})/(\d{2})/(\d{4})'
         return '{}-{}-{}'.format(match.group(3), match.group(2), match.group(1))
@@ -212,3 +224,17 @@ class FWFFile(metaclass=FWFFileMeta):
                 return row
 
 
+# class TPF(CSVFile):
+#     _skip = 3
+#     symbol = Field(0)
+#     refdate = DateField(1)
+#     cod_selic = Field(2)
+#     issue_date = DateField(3)
+#     maturity_date = DateField(4)
+#     bid_yield = NumericField(5)
+#     ask_yield = NumericField(6)
+#     ref_yield = NumericField(7)
+#     price = NumericField(8)
+
+
+# tpf = TPF(fname)
