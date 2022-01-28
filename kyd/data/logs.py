@@ -10,11 +10,15 @@ def _create_downloadlog_key(data):
     return '{}:{:.0f}'.format(data['name'], data['time'].timestamp())
 
 
-def save_download_logs(data):
+def _format(data):
     data['refdate'] = data['refdate'] and datetime.strptime(data['refdate'], '%Y-%m-%dT%H:%M:%S.%f%z')
     if data['refdate']:
         data['refdate'].replace(tzinfo=pytz.timezone('America/Sao_Paulo'))
     data['time'] = datetime.strptime(data['time'], '%Y-%m-%dT%H:%M:%S.%f%z')
+
+
+def save_download_logs(data):
+    _format(data)
 
     client = datastore.Client()
     key = client.key('DownloadLog', _create_downloadlog_key(data))
@@ -24,13 +28,19 @@ def save_download_logs(data):
 
 
 def save_process_logs(data):
-    data['refdate'] = data['refdate'] and datetime.strptime(data['refdate'], '%Y-%m-%dT%H:%M:%S.%f%z')
-    if data['refdate']:
-        data['refdate'].replace(tzinfo=pytz.timezone('America/Sao_Paulo'))
-    data['time'] = datetime.strptime(data['time'], '%Y-%m-%dT%H:%M:%S.%f%z')
+    parent = data['parent']
+    _format(parent)
 
     client = datastore.Client()
-    key = client.key('DownloadLog', _create_downloadlog_key(data))
-    log_entry = datastore.Entity(key)
-    log_entry.update(data)
-    client.put(log_entry)
+    parent_key = client.key('DownloadLog', _create_downloadlog_key(parent))
+    if data.get('results'):
+        for pr in data['results']:
+            key = client.key('ProcessorLog', parent=parent_key)
+            log_entry = datastore.Entity(key)
+            log_entry.update(pr)
+            client.put(log_entry)
+    else:
+        key = client.key('ProcessorLog', parent=parent_key)
+        log_entry = datastore.Entity(key)
+        log_entry.update({'error': data['error']})
+        client.put(log_entry)
