@@ -41,6 +41,8 @@ def save_process_logs(data):
             else:
                 key = client.key('ProcessorLog')
             log_entry = datastore.Entity(key)
+            pr['time'] = data['time']
+            pr['processor_name'] = data['processor_name']
             log_entry.update(pr)
             client.put(log_entry)
     else:
@@ -49,5 +51,9 @@ def save_process_logs(data):
         else:
             key = client.key('ProcessorLog')
         log_entry = datastore.Entity(key)
-        log_entry.update({'error': data['error']})
+        log_entry.update({
+            'error': data['error'],
+            'time': data['time'],
+            'processor_name': data['processor_name'],
+        })
         client.put(log_entry)
