@@ -33,13 +33,9 @@ def save_process_logs(data):
 
     client = datastore.Client()
     parent_key = client.key('DownloadLog', _create_downloadlog_key(parent))
-    # parent = client.get(parent_key)
     if data.get('results'):
         for pr in data['results']:
             key = client.key('ProcessorLog', parent=parent_key)
-            # if parent:
-            # else:
-            #     key = client.key('ProcessorLog')
             log_entry = datastore.Entity(key)
             pr['time'] = data['time']
             pr['processor_name'] = data['processor_name']
@@ -47,9 +43,6 @@ def save_process_logs(data):
             client.put(log_entry)
     else:
         key = client.key('ProcessorLog', parent=parent_key)
-        # if parent:
-        # else:
-        #     key = client.key('ProcessorLog')
         log_entry = datastore.Entity(key)
         log_entry.update({
             'error': data['error'],
