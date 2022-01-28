@@ -272,7 +272,7 @@ class PreparedURLDownloader(SingleDownloader):
 
 
 class B3FilesURLDownloader(SingleDownloader):
-    calendar = bizdays.Calendar.load('ANBIMA.cal')
+    calendar = bizdays.Calendar.load('ANBIMA')
     def download(self, refdate=None):
         filename = self.attrs.get('filename')
         refdate = refdate or self.get_refdate()
@@ -304,7 +304,7 @@ class B3FilesURLDownloader(SingleDownloader):
 
 
 class B3StockIndexInfoDownloader(SingleDownloader):
-    calendar = bizdays.Calendar.load('ANBIMA.cal')
+    calendar = bizdays.Calendar.load('ANBIMA')
     def download(self, refdate=None):
         params = json.dumps({
             'pageNumber': 1,
@@ -322,7 +322,7 @@ class B3StockIndexInfoDownloader(SingleDownloader):
 
 
 class VnaAnbimaURLDownloader(SingleDownloader):
-    calendar = bizdays.Calendar.load('ANBIMA.cal')
+    calendar = bizdays.Calendar.load('ANBIMA')
     def download(self, refdate=None):
         refdate = refdate or self.get_refdate()
         logging.info('refdate %s', refdate)
