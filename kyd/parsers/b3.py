@@ -75,15 +75,16 @@ class CDIIDI:
             _data = json.loads(fp.read())
         cdi_data = {
             'refdate': text_parser.parse(_data['dataTaxa']),
-            'last_price': text_parser.parse(_data['taxa']),
+            'value': text_parser.parse(_data['taxa']),
             'symbol': 'CDI'
         }
         idi_data = {
             'refdate': text_parser.parse(_data['dataIndice']),
-            'last_price': text_parser.parse(_data['indice']),
+            'value': text_parser.parse(_data['indice']),
             'symbol': 'IDI'
         }
-        self._data = [cdi_data, idi_data]
+        self._info = [cdi_data, idi_data]
+        self._data = pd.DataFrame(self._info)
 
     @property
     def data(self):
