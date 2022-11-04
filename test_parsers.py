@@ -1,7 +1,8 @@
 
 from kyd.parsers import unzip_to
-from kyd.parsers.b3 import CDIIDI, BVBG028, BVBG086, TaxaSwap
+from kyd.parsers.b3 import CDIIDI, BVBG028, BVBG086, TaxaSwap, BVBG087
 from kyd.parsers.b3 import COTAHIST
+from kyd.parsers.anbima import AnbimaTPF, AnbimaVnaTPF, AnbimaDebentures
 
 def test_CDIIDI():
     x = CDIIDI('data/CDIIDI_2019-09-22.json')
@@ -39,4 +40,26 @@ def test_fwf():
 def test_fwf_huge_files():
     x = COTAHIST('data/COTAHIST_A2020.TXT')
     assert len(x.data) > 0
+
+
+def test_BVBG087():
+    dest = unzip_to('data/IR210423.zip', 'data')
+    x = BVBG087(dest)
+    assert len(x.data) > 0
+
+
+def test_AnbimaTPF():
+    x = AnbimaTPF('data/ANBIMA_TPF_2019-01-02.txt')
+    assert len(x.data) > 0
+
+
+def test_AnbimaVnaTPF():
+    x = AnbimaVnaTPF('data/2021-11-02.html')
+    assert len(x.data) > 0
+
+
+def test_AnbimaDebentures():
+    x = AnbimaDebentures('data/deb_2021-04-20.txt')
+    assert len(x.data) > 0
+
 
