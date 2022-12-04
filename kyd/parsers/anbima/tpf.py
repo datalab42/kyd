@@ -3,7 +3,7 @@ from lxml import etree
 from ..util import PortugueseRulesParser2
 
 
-class AnbimaTPF:
+class TPFParser:
     def __init__(self, fname):
         self.fname = fname
         self.encoding = "latin1"
@@ -42,7 +42,7 @@ def get_all_node_text(node):
     return "".join(x.strip() for x in node.itertext())
 
 
-class AnbimaVnaTPF:
+class VnaTPFParser:
     def __init__(self, fname):
         self.fname = fname
         self.encoding = "latin1"
@@ -59,7 +59,7 @@ class AnbimaVnaTPF:
             self._data.append(self._parse_vna_node(tree, "listaLFT"))
 
     def _parse_vna_node(self, tree, id):
-        trs = tree.xpath(f"//div[@id='{id}']/*/table/tr")
+        trs = tree.xpath(f"//div[@id='{id}']/*/table/*/tr")
         if len(trs) == 0:
             return {}
         instrument_ref = get_all_node_text(trs[0])

@@ -56,7 +56,7 @@ class COTAHIST_file(FWFFile):
     data = COTAHIST_histdata()
 
 
-class COTAHIST:
+class COTAHISTParser:
     def __init__(self, fname):
         self.fname = fname
         self._data = None

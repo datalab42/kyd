@@ -3,7 +3,7 @@ import pandas as pd
 from ..util import PortugueseRulesParser2
 
 
-class CDIIDI:
+class CDIIDIParser:
     def __init__(self, fname):
         self.fname = fname
         self.parse()
@@ -27,4 +27,4 @@ class CDIIDI:
 
     @property
     def data(self):
-        return self._data
+        return self._info

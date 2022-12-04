@@ -8,7 +8,7 @@ def smart_find(node, x, ns):
         return None
 
 
-class BVBG087:
+class BVBG087Parser:
     ATTRS = {
         "IndxInf": {
             "ticker_symbol": "SctyInf/SctyId/TckrSymb",

@@ -63,7 +63,7 @@ def read_fwf(con, widths, colnames=None, skip=0, parse_fun=lambda x: x):
         line = line.strip()
         if len(line) != line_len:
             continue
-        fields = [line[dx[0] : dx[1]].strip() for dx in colpositions]
+        fields = [line[dx[0]: dx[1]].strip() for dx in colpositions]
         obj = dict((k, v) for k, v in zip(colnames, fields))
         terms.append(parse_fun(obj))
 

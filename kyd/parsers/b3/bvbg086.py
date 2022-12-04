@@ -1,7 +1,7 @@
 from lxml import etree
 
 
-class BVBG086:
+class BVBG086Parser:
     def __init__(self, fname):
         self.fname = fname
         self.instruments = []

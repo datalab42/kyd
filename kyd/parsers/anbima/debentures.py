@@ -4,7 +4,7 @@ import pandas as pd
 from ..util import PortugueseRulesParser2
 
 
-class AnbimaDebentures:
+class DebenturesParser:
     def __init__(self, fname):
         self.fname = fname
         self.encoding = "latin1"
@@ -58,4 +58,4 @@ class AnbimaDebentures:
 
     @property
     def data(self):
-        return self._data
+        return self.instruments

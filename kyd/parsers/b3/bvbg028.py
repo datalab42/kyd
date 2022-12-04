@@ -1,7 +1,7 @@
 from lxml import etree
 
 
-class BVBG028:
+class BVBG028Parser:
     ATTRS = {
         "header": {
             "trade_date": "RptParams/RptDtAndTm/Dt",
