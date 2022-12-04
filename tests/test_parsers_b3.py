@@ -45,12 +45,6 @@ def test_fwf():
     os.remove(dest)
 
 
-def test_fwf_huge_files():
-    x = COTAHISTParser('data/COTAHIST_A2020.TXT')
-    assert isinstance(x.data, list)
-    assert len(x.data) > 0
-
-
 def test_BVBG087():
     dest = unzip_to('data/IR210423.zip', 'data')
     x = BVBG087Parser(dest)
