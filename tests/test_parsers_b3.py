@@ -1,6 +1,7 @@
 import os
+import pandas as pd
 from kyd.parsers.util import unzip_to
-from kyd.parsers.b3 import CDIIDIParser, BVBG028Parser, BVBG086Parser, TaxaSwapParser, BVBG087Parser, COTAHISTParser
+from kyd.parsers.b3 import CDIIDIParser, BVBG028Parser, BVBG086Parser, TaxaSwapParser, BVBG087Parser, COTAHISTParser, StockIndexInfoParser
 
 
 def test_CDIIDI():
@@ -11,6 +12,12 @@ def test_CDIIDI():
     assert x.data[0]['refdate'] == '2019-09-20'
     assert x.data[0]['symbol'] == 'CDI'
     assert len(x.data) == 2
+
+
+def test_StockIndexInfoParser():
+    x = StockIndexInfoParser('data/StockIndexInfo_2021-09-06.json')
+    assert isinstance(x.data, pd.DataFrame)
+    assert len(x.data) > 0
 
 
 def test_BVBG028():
