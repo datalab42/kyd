@@ -1,4 +1,4 @@
--e git://github.com/wilsonfreitas/textparser.git#egg=textparser
+regexparser
 lxml
 bizdays
 pandas

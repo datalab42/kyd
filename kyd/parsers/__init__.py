@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 from collections import OrderedDict
 
-from textparser import PortugueseRulesParser, GenericParser
+from regexparser import PortugueseRulesParser, GenericParser
 
 
 class PortugueseRulesParser2(PortugueseRulesParser):
