@@ -22,12 +22,17 @@ class TaxaSwapParser:
     ]
 
     def __init__(self, fname):
-        with open(fname, 'r') as fp:
-            rawdata = fp.read()
-            self.__data = read_fwf(rawdata.split(
-                '\n'), self.widths, self.colnames, parse_fun=self._parse)
+        if isinstance(fname, str):
+            fp = open(fname, "r")
+        else:
+            fp = fname
+        rawdata = fp.read()
+        self.__data = read_fwf(rawdata.split(
+            '\n'), self.widths, self.colnames, parse_fun=self._parse)
         self.__findata = [self._build_findata(list(v)) for k, v in groupby(
             self.__data, key=lambda x: x['cod_taxa'])]
+        if isinstance(fname, str):
+            fp.close()
 
     def _parse(self, obj):
         obj['data_geracao_arquivo'] = '{}-{}-{}'.format(

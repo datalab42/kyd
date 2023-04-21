@@ -1,15 +1,15 @@
 
 import os
 import tempfile
-from kyd.parsers.util import unzip_and_get_content, unzip_to
+from kyd.parsers.util import unzip_and_get_content, unzip_file_to
 
 
 def test_unzip():
-    dest = unzip_to('data/TS190910.ex_', 'data')
+    dest = unzip_file_to('data/TS190910.ex_', 'data')
     assert os.path.exists(dest)
 
     destdir = tempfile.gettempdir()
-    dest = unzip_to('data/TS190910.ex_', destdir)
+    dest = unzip_file_to('data/TS190910.ex_', destdir)
     assert os.path.exists(dest)
 
 

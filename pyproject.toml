@@ -11,6 +11,7 @@ python = "^3.8"
 lxml = "^4.9.1"
 bizdays = "^1.0.3"
 pandas = "^1.4.4"
+xlrd = "^2.0.1"
 textparser = {git = "https://github.com/wilsonfreitas/textparser.git"}
 
 

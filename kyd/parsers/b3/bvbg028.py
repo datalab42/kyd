@@ -1,7 +1,10 @@
+
+import io
 from lxml import etree
+from ..util import Parser
 
 
-class BVBG028Parser:
+class BVBG028Parser(Parser):
     ATTRS = {
         "header": {
             "trade_date": "RptParams/RptDtAndTm/Dt",
@@ -86,6 +89,8 @@ class BVBG028Parser:
         },
     }
 
+    mode = "rb"
+
     def __init__(self, fname):
         self.fname = fname
         self.instruments = []
@@ -93,8 +98,7 @@ class BVBG028Parser:
         self.parse()
 
     def parse(self):
-        with open(self.fname, "rb") as fp:
-            tree = etree.parse(fp)
+        tree = self._open(self.fname, etree.parse)
         exchange = tree.getroot()[0][0]
         ns = {None: "urn:bvmf.052.01.xsd"}
         td_xpath = etree.ETXPath("//{urn:bvmf.052.01.xsd}BizGrpDtls")

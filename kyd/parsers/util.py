@@ -1,8 +1,22 @@
+import io
 import os
 import zipfile
 import logging
 
 from textparser import PortugueseRulesParser, GenericParser
+
+
+class Parser:
+    mode = "r"
+    encoding = None
+
+    def _open(self, fp, func):
+        if isinstance(fp, io.IOBase):
+            x = func(fp)
+        else:
+            with open(fp, self.mode, encoding=self.encoding) as f:
+                x = func(f)
+        return x
 
 
 class PortugueseRulesParser2(PortugueseRulesParser):
@@ -83,30 +97,22 @@ def str_or_none(val):
 
 
 def unzip_and_get_content(fname, index=-1, encode=False, encoding="latin1"):
-    with open(fname, "rb") as temp:
-        zf = zipfile.ZipFile(temp)
-        name = zf.namelist()[index]
-        logging.info("zipped file %s", name)
-        content = zf.read(name)
-        zf.close()
-    # temp.close()
+    zf = zipfile.ZipFile(fname)
+    name = zf.namelist()[index]
+    logging.debug("zipped file %s", name)
+    content = zf.read(name)
+    zf.close()
+
     if encode:
         return content.decode(encoding)
     else:
         return content
 
 
-def unzip_to(fname, dest, index=-1):
-    with open(fname, "rb") as temp:
-        fp = unzip_file_to(temp, dest, index)
-
-    return fp
-
-
 def unzip_file_to(temp, dest, index=-1):
     zf = zipfile.ZipFile(temp)
     name = zf.namelist()[index]
-    logging.info("zipped file %s", name)
+    logging.debug("zipped file %s", name)
     zf.extract(name, dest)
     zf.close()
 

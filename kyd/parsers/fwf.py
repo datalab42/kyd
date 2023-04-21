@@ -25,7 +25,7 @@ def read_fwf(con, widths, colnames=None, skip=0, parse_fun=lambda x: x):
         line = line.strip()
         if len(line) != line_len:
             continue
-        fields = [line[dx[0] : dx[1]].strip() for dx in colpositions]
+        fields = [line[dx[0]: dx[1]].strip() for dx in colpositions]
         obj = dict((k, v) for k, v in zip(colnames, fields))
         terms.append(parse_fun(obj))
 
@@ -121,21 +121,26 @@ class FWFFile(metaclass=FWFFileMeta):
     skip_row = 0
 
     def __init__(self, fname, encoding="UTF8"):
-        with open(fname, "r", encoding=encoding) as fp:
-            for ix, line in enumerate(fp):
-                if ix < self.skip_row:
-                    continue
-                row_name, row_template = self._get_row_template(line)
-                # TODO: define policy to discard unmatched lines and
-                #       lines with parsing errors
-                # if len(line) < len(row_template):
-                #     continue
-                fields = [
-                    dx[2](line[dx[0] : dx[1]].strip())
-                    for dx in row_template.colpositions
-                ]
-                obj = dict((k, v) for k, v in zip(row_template.names, fields))
-                self._buckets[row_name].append(obj)
+        if isinstance(fname, str):
+            fp = open(fname, "r", encoding=encoding)
+        else:
+            fp = fname
+        for ix, line in enumerate(fp):
+            if ix < self.skip_row:
+                continue
+            row_name, row_template = self._get_row_template(line)
+            # TODO: define policy to discard unmatched lines and
+            #       lines with parsing errors
+            # if len(line) < len(row_template):
+            #     continue
+            fields = [
+                dx[2](line[dx[0]: dx[1]].strip())
+                for dx in row_template.colpositions
+            ]
+            obj = dict((k, v) for k, v in zip(row_template.names, fields))
+            self._buckets[row_name].append(obj)
+        if isinstance(fname, str):
+            fp.close()
 
     def __getattribute__(self, name: str):
         buckets = super(FWFFile, self).__getattribute__("_buckets")

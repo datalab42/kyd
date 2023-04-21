@@ -1,17 +1,16 @@
 import json
 import pandas as pd
-from ..util import PortugueseRulesParser2
+from ..util import PortugueseRulesParser2, Parser
 
 
-class CDIIDIParser:
+class CDIIDIParser(Parser):
     def __init__(self, fname):
         self.fname = fname
         self.parse()
 
     def parse(self):
         text_parser = PortugueseRulesParser2()
-        with open(self.fname, "r") as fp:
-            _data = json.loads(fp.read())
+        _data = self._open(self.fname, json.load)
         cdi_data = {
             "refdate": text_parser.parse(_data["dataTaxa"]),
             "value": text_parser.parse(_data["taxa"]),

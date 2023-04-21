@@ -1,7 +1,10 @@
+from ..util import Parser
 from lxml import etree
 
 
-class BVBG086Parser:
+class BVBG086Parser(Parser):
+    mode = "rb"
+
     def __init__(self, fname):
         self.fname = fname
         self.instruments = []
@@ -9,8 +12,7 @@ class BVBG086Parser:
         self.parse()
 
     def parse(self):
-        with open(self.fname, "rb") as fp:
-            tree = etree.parse(fp)
+        tree = self._open(self.fname, etree.parse)
         exchange = tree.getroot()[0][0]
         ns = {None: "urn:bvmf.052.01.xsd"}
         td_xpath = etree.ETXPath("//{urn:bvmf.052.01.xsd}BizGrpDtls")

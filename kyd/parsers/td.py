@@ -1,11 +1,15 @@
 from datetime import datetime
 import pandas as pd
 from collections import namedtuple
+from .util import Parser
 
 
-class TesouroDiretoHistoricalDataParser:
+class TesouroDiretoHistoricalDataParser(Parser):
+    mode = "rb"
+    encoding = None
+
     def __init__(self, fname, date_format="%d/%m/%Y", sheet_date_format="%d%m%y"):
-        excel_file = pd.ExcelFile(fname)
+        excel_file = self._open(fname, pd.ExcelFile)
         self.date_format = date_format
         self.sheet_date_format = sheet_date_format
         self._parse(excel_file)

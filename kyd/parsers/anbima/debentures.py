@@ -1,20 +1,20 @@
-import re
+import io
 from itertools import dropwhile
 import pandas as pd
-from ..util import PortugueseRulesParser2
+from ..util import PortugueseRulesParser2, Parser
 
 
-class DebenturesParser:
+class DebenturesParser(Parser):
+    encoding = "latin1"
+
     def __init__(self, fname):
         self.fname = fname
-        self.encoding = "latin1"
         self.instruments = []
         self.pp = PortugueseRulesParser2()
         self.parse()
 
     def parse(self):
-        with open(self.fname, "r", encoding=self.encoding) as fp:
-            self._parse(fp)
+        self._open(self.fname, self._parse)
 
     def _parse(self, fp):
         # 0 Código@
@@ -32,8 +32,6 @@ class DebenturesParser:
         # 12 Duration@
         # 13 % Reune@
         # 14 Referência NTN-B
-        m = re.search(r"\d{4}-\d\d-\d\d", self.fname)
-        refdate = m.group() if m else None
         _drop_first_n = dropwhile(lambda x: x[0] < 3, enumerate(fp))
         _drop_empy = filter(lambda x: x[1].strip() != "", _drop_first_n)
         for _, line in _drop_empy:
@@ -51,7 +49,6 @@ class DebenturesParser:
                 duration=self.pp.parse(row[12]),
                 perc_reune=self.pp.parse(row[13]),
                 ref_ntnb=self.pp.parse(row[14]),
-                refdate=refdate,  # from filename
             )
             self.instruments.append(tit)
         self._data = pd.DataFrame(self.instruments)

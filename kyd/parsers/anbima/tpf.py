@@ -1,19 +1,20 @@
+import io
 from itertools import dropwhile
 from lxml import etree
-from ..util import PortugueseRulesParser2
+from ..util import PortugueseRulesParser2, Parser
 
 
-class TPFParser:
+class TPFParser(Parser):
+    encoding = "latin1"
+
     def __init__(self, fname):
         self.fname = fname
-        self.encoding = "latin1"
         self.instruments = []
         self.pp = PortugueseRulesParser2()
         self.parse()
 
     def parse(self):
-        with open(self.fname, "r", encoding=self.encoding) as fp:
-            self._parse(fp)
+        self._open(self.fname, self._parse)
 
     def _parse(self, fp):
         _drop_first_n = dropwhile(lambda x: x[0] < 3, enumerate(fp))
@@ -42,21 +43,21 @@ def get_all_node_text(node):
     return "".join(x.strip() for x in node.itertext())
 
 
-class VnaTPFParser:
+class VnaTPFParser(Parser):
+    encoding = "latin1"
+
     def __init__(self, fname):
         self.fname = fname
-        self.encoding = "latin1"
         self.pp = PortugueseRulesParser2()
         self._data = []
         self.parse()
 
     def parse(self):
-        with open(self.fname, "r", encoding=self.encoding) as fp:
-            parser = etree.HTMLParser()
-            tree = etree.parse(fp, parser)
-            self._data.append(self._parse_vna_node(tree, "listaNTN-B"))
-            self._data.append(self._parse_vna_node(tree, "listaNTN-C"))
-            self._data.append(self._parse_vna_node(tree, "listaLFT"))
+        parser = etree.HTMLParser()
+        tree = self._open(self.fname, lambda x: etree.parse(x, parser))
+        self._data.append(self._parse_vna_node(tree, "listaNTN-B"))
+        self._data.append(self._parse_vna_node(tree, "listaNTN-C"))
+        self._data.append(self._parse_vna_node(tree, "listaLFT"))
 
     def _parse_vna_node(self, tree, id):
         trs = tree.xpath(f"//div[@id='{id}']/*/table/*/tr")

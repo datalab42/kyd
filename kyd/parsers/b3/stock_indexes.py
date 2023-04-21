@@ -1,16 +1,16 @@
 import json
 import pandas as pd
+from ..util import Parser
 
 
-class StockIndexInfoParser:
+class StockIndexInfoParser(Parser):
     def __init__(self, fname):
         self.fname = fname
         self._table = None
         self.parse()
 
     def parse(self):
-        with open(self.fname) as fp:
-            self._data = json.loads(fp.read())
+        self._data = self._open(self.fname, json.load)
 
         df = pd.DataFrame(self._data["results"])
 

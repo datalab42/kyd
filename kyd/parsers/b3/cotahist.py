@@ -57,13 +57,15 @@ class COTAHIST_file(FWFFile):
 
 
 class COTAHISTParser:
+    encoding = "latin1"
+
     def __init__(self, fname):
         self.fname = fname
         self._data = None
         self.parse()
 
     def parse(self):
-        self._data = COTAHIST_file(self.fname, encoding="latin1")
+        self._data = COTAHIST_file(self.fname, encoding=self.encoding)
 
     @property
     def data(self):

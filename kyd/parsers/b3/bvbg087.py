@@ -1,3 +1,4 @@
+from ..util import Parser
 from lxml import etree
 
 
@@ -8,7 +9,7 @@ def smart_find(node, x, ns):
         return None
 
 
-class BVBG087Parser:
+class BVBG087Parser(Parser):
     ATTRS = {
         "IndxInf": {
             "ticker_symbol": "SctyInf/SctyId/TckrSymb",
@@ -50,14 +51,15 @@ class BVBG087Parser:
         },
     }
 
+    mode = "rb"
+
     def __init__(self, fname):
         self.fname = fname
         self.indexes = []
         self.parse()
 
     def parse(self):
-        with open(self.fname, "rb") as fp:
-            tree = etree.parse(fp)
+        tree = self._open(self.fname, etree.parse)
 
         ns = {None: "urn:bvmf.218.01.xsd"}
         exchange = tree.getroot()[0][0]
