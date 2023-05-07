@@ -1,4 +1,5 @@
--e git://github.com/wilsonfreitas/textparser.git#egg=textparser
+regexparser
 lxml
 bizdays
 pandas
+google-cloud-datastore==2.15.1
