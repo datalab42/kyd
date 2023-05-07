@@ -6,6 +6,7 @@ import pytz
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from google.cloud import datastore
+from google.cloud.datastore.query import PropertyFilter, And
 
 client = datastore.Client()
 SP_TZ = pytz.timezone('America/Sao_Paulo')
@@ -19,6 +20,7 @@ HEADER = {
     'status': 'Status',
     'message': 'Message',
 }
+
 
 def gentable(data):
     table = '<table width="100%" style="border:1px solid #333">\n'
@@ -41,6 +43,7 @@ def gentable(data):
 
     return table
 
+
 def getdata(date):
     # date = datetime.now(SP_TZ) + timedelta(-1)
     logging.info('Now date %s', date)
@@ -51,20 +54,27 @@ def getdata(date):
     logging.info('%s %s %s', date, t1, t2)
 
     q = client.query(kind='DownloadLog')
-    q.add_filter('time', '>=', t1)
-    q.add_filter('time', '<=', t2)
+    q.add_filter(filter=And([
+        PropertyFilter("time", ">=", t1),
+        PropertyFilter("time", "<=", t2),
+    ]))
+    # q.add_filter('time', '>=', t1)
+    # q.add_filter('time', '<=', t2)
     logs = list(q.fetch())
     for log in logs:
         if log['refdate']:
-            log['refdate'] = log['refdate'].astimezone(SP_TZ).strftime('%Y-%m-%d')
+            log['refdate'] = log['refdate'].astimezone(
+                SP_TZ).strftime('%Y-%m-%d')
         else:
             log['refdate'] = ''
-        log['time'] = log['time'].astimezone(SP_TZ).strftime('%Y-%m-%d %H:%M:%S.%f')
+        log['time'] = log['time'].astimezone(
+            SP_TZ).strftime('%Y-%m-%d %H:%M:%S.%f')
         if log['status'] == 0:
-            log['filename'] = 'gs://{}/{}'.format(log['bucket'], log['filename'])
+            log['filename'] = 'gs://{}/{}'.format(
+                log['bucket'], log['filename'])
         else:
             log['filename'] = ''
-    
+
     logs_sorted = logs.copy()
     logs_sorted.sort(key=lambda x: x['download_status'], reverse=False)
     return gentable(logs_sorted)
@@ -112,5 +122,5 @@ def sendmail(date):
 
 if __name__ == '__main__':
     import datetime
-    sendmail(datetime.datetime(2021, 4, 29))
+    sendmail(datetime.datetime(2023, 5, 6))
     # print(getdata(datetime.datetime(2021, 4, 21)).__html__())
