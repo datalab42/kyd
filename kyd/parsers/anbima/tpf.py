@@ -3,6 +3,22 @@ from itertools import dropwhile
 from lxml import etree
 from ..util import PortugueseRulesParser2, Parser
 
+from kyd.readers.csv import CSVFile, Field, DateField, NumericField
+
+
+class TPFFile(CSVFile):
+    encoding = "latin1"
+    separator = "@"
+    symbol = Field()
+    refdate = DateField("%Y%m%d")
+    cod_selic = Field()
+    issue_date = DateField("%Y%m%d")
+    maturity_date = DateField("%Y%m%d")
+    bid_yield = NumericField()
+    ask_yield = Field()
+    ref_yield = Field()
+    price = Field()
+
 
 class TPFParser(Parser):
     encoding = "latin1"

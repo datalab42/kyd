@@ -5,6 +5,10 @@ description = "Python library to download data from B3, ANBIMA, etc"
 authors = ["wilsonfreitas <wilson.freitas@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+include = [
+  {path = "kyd", package = true},
+  {path = "templates"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -12,7 +16,7 @@ lxml = "^4.9.1"
 bizdays = "^1.0.3"
 pandas = "^1.4.4"
 xlrd = "^2.0.1"
-textparser = {git = "https://github.com/wilsonfreitas/textparser.git"}
+regexparser = "^0.1.0"
 
 
 [tool.poetry.group.dev.dependencies]

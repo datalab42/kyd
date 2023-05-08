@@ -1,5 +1,41 @@
 
 from . import GenericParser, float_or_none
+from .util import Parser, PortugueseRulesParser2
+
+class InformesDiariosParser(Parser):
+    encoding = "latin1"
+
+    def __init__(self, fname):
+        self.fname = fname
+        self.funds = []
+        self.pp = PortugueseRulesParser2()
+        self.parse()
+
+    def parse(self):
+        self._open(self.fname, self._parse)
+
+    def _parse(self, fp):
+        _drop_first_n = dropwhile(lambda x: x[0] < 3, enumerate(fp))
+        _drop_empy = filter(lambda x: x[1].strip() != "", _drop_first_n)
+        for _, line in _drop_empy:
+            row = line.split("@")
+            tit = dict(
+                symbol=row[0],
+                refdate=self.pp.parse(row[1]),
+                cod_selic=row[2],
+                issue_date=self.pp.parse(row[3]),
+                maturity_date=self.pp.parse(row[4]),
+                bid_yield=self.pp.parse(row[5]),
+                ask_yield=self.pp.parse(row[6]),
+                ref_yield=self.pp.parse(row[7]),
+                price=self.pp.parse(row[8]),
+            )
+            self.instruments.append(tit)
+
+    @property
+    def data(self):
+        return self.instruments
+
 
 def handle_row(row, names, parser=lambda x: x):
     fields = [parser(val.strip()) for val in row.split(';')]

@@ -3,7 +3,7 @@ import os
 import zipfile
 import logging
 
-from textparser import PortugueseRulesParser, GenericParser
+from regexparser import PortugueseRulesParser, GenericParser
 
 
 class Parser:
