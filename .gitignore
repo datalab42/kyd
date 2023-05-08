@@ -2,4 +2,4 @@
 *.egg
 examples
 notebooks
-sendfrid.env
+sendgrid.env
